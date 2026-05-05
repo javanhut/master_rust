@@ -87,6 +87,10 @@ struct Exercise {
     mode: Mode,
     #[serde(default)]
     hint: String,
+    /// For `run`-mode exercises: required exact stdout (after trim).
+    /// If absent, any successful exit (code 0) counts as a pass.
+    #[serde(default)]
+    expect: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Clone, Copy, Default, PartialEq, Eq)]
@@ -157,7 +161,13 @@ fn run_exercise(ex: &Exercise) -> Result<Outcome> {
     let src = course_root()?.join(&ex.path);
     let source = fs::read_to_string(&src)
         .with_context(|| format!("cannot read exercise at {}", src.display()))?;
-    if source.contains(NOT_DONE_MARKER) { return Ok(Outcome::NotDone); }
+    // Only treat the marker as "still present" if it appears as a standalone
+    // line (i.e. the line's trimmed content equals exactly the marker). This
+    // lets the teaching block REFER to the marker by name without tripping
+    // the engagement gate.
+    if source.lines().any(|l| l.trim() == NOT_DONE_MARKER) {
+        return Ok(Outcome::NotDone);
+    }
 
     let bin = build_dir()?.join(&ex.name);
     let mut cmd = Command::new("rustc");
@@ -182,13 +192,26 @@ fn run_exercise(ex: &Exercise) -> Result<Outcome> {
         }
         Mode::Run => {
             let r = Command::new(&bin).output()?;
-            if r.status.success() {
-                Ok(Outcome::Passed(String::from_utf8_lossy(&r.stdout).into_owned()))
-            } else {
-                let mut buf = String::from_utf8_lossy(&r.stdout).into_owned();
+            let stdout = String::from_utf8_lossy(&r.stdout).into_owned();
+            if !r.status.success() {
+                let mut buf = stdout.clone();
                 buf.push_str(&String::from_utf8_lossy(&r.stderr));
-                Ok(Outcome::RunFailed(buf))
+                return Ok(Outcome::RunFailed(buf));
             }
+            // If the manifest declared an expected output, compare it.
+            if let Some(want) = &ex.expect {
+                let got_t = stdout.trim_end();
+                let want_t = want.trim_end();
+                if got_t != want_t {
+                    let msg = format!(
+                        "{BOLD}Output didn't match.{RESET}\n\n  {BOLD}expected:{RESET}\n{}\n\n  {BOLD}your program printed:{RESET}\n{}\n",
+                        indent(want_t, "    "),
+                        indent(got_t, "    "),
+                    );
+                    return Ok(Outcome::RunFailed(msg));
+                }
+            }
+            Ok(Outcome::Passed(stdout))
         }
     }
 }
@@ -300,6 +323,10 @@ fn print_run_block(ex: &Exercise, outcome: &Outcome) {
         }
     }
     println!();
+}
+
+fn indent(text: &str, pad: &str) -> String {
+    text.lines().map(|l| format!("{pad}{l}")).collect::<Vec<_>>().join("\n")
 }
 
 fn solution_path_for(ex: &Exercise) -> PathBuf {
