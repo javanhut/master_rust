@@ -1,0 +1,21 @@
+[package]
+name = "master_rust"
+version = "0.1.0"
+edition = "2024"
+description = "A beginner-friendly, deeply-explained Rustlings-style course that takes you from zero to professional Rust."
+
+[[bin]]
+name = "master_rust"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+crossterm = "0.27"
+notify = "8.2.0"
+serde = { version = "1", features = ["derive"] }
+toml = "1.1"
+
+[profile.release]
+opt-level = 3
+lto = "thin"

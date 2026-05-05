@@ -1,0 +1,1773 @@
+# master_rust — exercise manifest
+# Order in this file = order the runner serves them.
+# `mode` values: "compile" (default), "test", "run"
+
+# ====================== Chapter 1 — Intro & Variables ========================
+
+[[exercises]]
+name = "intro1"
+path = "exercises/01_intro/intro1.rs"
+mode = "run"
+hint = """
+The very first exercise. Read every comment in the file before changing anything.
+You only need to do TWO things:
+  1. Find the `// I AM NOT DONE` line near the top and DELETE it.
+  2. Look at the body of `main` — there is one ??? you need to replace.
+The `println!` macro takes a string literal as its first argument.
+"""
+
+[[exercises]]
+name = "intro2"
+path = "exercises/01_intro/intro2_print.rs"
+mode = "run"
+hint = """
+println! formatting placeholders:
+  {}    — uses the type's Display impl (human-friendly).
+  {:?}  — uses Debug (programmer-friendly, works on more types).
+  {:#?} — pretty-printed Debug (multi-line).
+You can pass arguments by position ({0}, {1}) or by name ({name}).
+"""
+
+[[exercises]]
+name = "intro3"
+path = "exercises/01_intro/intro3_variables.rs"
+mode = "test"
+hint = """
+`let x = 10;` declares an *immutable* binding. The type is inferred.
+You can't assign to it again — Rust will refuse to compile.
+"""
+
+[[exercises]]
+name = "intro4"
+path = "exercises/01_intro/intro4_mutability.rs"
+mode = "test"
+hint = """
+To make a binding mutable, write `let mut x = 0;`.
+Mutability in Rust is a *property of the binding*, not the type.
+"""
+
+[[exercises]]
+name = "intro5"
+path = "exercises/01_intro/intro5_shadowing.rs"
+mode = "test"
+hint = """
+Shadowing means re-declaring a name with a *new* `let`.
+The new binding can have a different type. This is different from `mut`,
+which only changes the value but keeps the same type.
+"""
+
+[[exercises]]
+name = "intro6"
+path = "exercises/01_intro/intro6_constants.rs"
+mode = "test"
+hint = """
+`const` requires:
+  - SCREAMING_SNAKE_CASE by convention,
+  - an explicit type annotation (the compiler will not infer it),
+  - a value that can be computed at compile time.
+"""
+
+[[exercises]]
+name = "intro7"
+path = "exercises/01_intro/intro7_types.rs"
+mode = "test"
+hint = """
+When the compiler can't infer a type, you must annotate it.
+`"42".parse()` is the classic case — `parse` works for many types, so you
+must say which: `let n: i32 = "42".parse().unwrap();`
+or                `let n = "42".parse::<i32>().unwrap();`  (turbofish).
+"""
+
+[[exercises]]
+name = "intro_quiz"
+path = "exercises/01_intro/intro_quiz.rs"
+mode = "test"
+hint = """
+This quiz combines everything from chapter 1. Go slowly — pick the right
+tool for each blank: `let`, `let mut`, shadowing, or `const`.
+"""
+
+# ===================== Chapter 2 — Primitive types ===========================
+
+[[exercises]]
+name = "types1_integers"
+path = "exercises/02_types/types1_integers.rs"
+mode = "test"
+hint = """
+Rust has signed (i8/i16/i32/i64/i128/isize) and unsigned (u…) integers.
+Default for an unannotated literal is i32.  Use `_` as a digit separator
+for readability: `1_000_000`.  Use `as` for explicit numeric casting.
+"""
+
+[[exercises]]
+name = "types2_floats"
+path = "exercises/02_types/types2_floats.rs"
+mode = "test"
+hint = """
+f32 and f64 — default is f64.  You CANNOT add an integer and a float
+without converting one of them. `2 + 3.0` is a type error;
+`2.0 + 3.0` or `(2 as f64) + 3.0` is fine.
+"""
+
+[[exercises]]
+name = "types3_bool_char"
+path = "exercises/02_types/types3_bool_char.rs"
+mode = "test"
+hint = """
+`bool` is `true` or `false`.
+`char` is a 4-byte Unicode scalar value (NOT a byte) — written with single
+quotes: 'a', '🦀'. Strings are a separate topic.
+"""
+
+[[exercises]]
+name = "types4_tuples"
+path = "exercises/02_types/types4_tuples.rs"
+mode = "test"
+hint = """
+A tuple groups values of possibly-different types: `(i32, f64, bool)`.
+Access fields by index with `.0`, `.1`, …, or destructure with `let (a,b,c)`.
+"""
+
+[[exercises]]
+name = "types5_arrays"
+path = "exercises/02_types/types5_arrays.rs"
+mode = "test"
+hint = """
+Array type is `[T; N]` — element type AND length are part of the type.
+`[0; 5]` makes `[0, 0, 0, 0, 0]`. Indexing is `arr[i]`.
+For a growable list use Vec<T> (later chapter).
+"""
+
+[[exercises]]
+name = "types_quiz"
+path = "exercises/02_types/types_quiz.rs"
+mode = "test"
+hint = """
+Combine integer, float, tuple, and array skills.
+"""
+
+# ================== Chapter 3 — Functions & control flow ====================
+
+[[exercises]]
+name = "fn1_basic"
+path = "exercises/03_flow/fn1_basic.rs"
+mode = "test"
+hint = """
+`fn add(a: i32, b: i32) -> i32 { a + b }`
+The last expression with NO semicolon is the return value.
+Adding `;` turns it into a statement that returns `()` — a common bug.
+"""
+
+[[exercises]]
+name = "fn2_expressions"
+path = "exercises/03_flow/fn2_expressions.rs"
+mode = "test"
+hint = """
+In Rust almost everything is an expression: `if`, blocks `{ ... }`, `match`.
+`let x = if cond { 1 } else { 2 };` is idiomatic.
+A trailing `;` discards the value of an expression.
+"""
+
+[[exercises]]
+name = "fn3_if"
+path = "exercises/03_flow/fn3_if.rs"
+mode = "test"
+hint = """
+`if` requires a bool — Rust will NOT auto-convert numbers or Options.
+Both arms of `if/else` used as a value must produce the same type.
+"""
+
+[[exercises]]
+name = "fn4_loops"
+path = "exercises/03_flow/fn4_loops.rs"
+mode = "test"
+hint = """
+Three loop forms:
+  loop { ... }            — infinite, exit with `break value;` (yes, break can return!)
+  while cond { ... }
+  for x in iter { ... }
+Use a range like `0..10` (exclusive) or `0..=10` (inclusive).
+"""
+
+[[exercises]]
+name = "fn5_early_return"
+path = "exercises/03_flow/fn5_early_return.rs"
+mode = "test"
+hint = """
+Use `return value;` for early exits.
+Most idiomatic Rust avoids `return` at the end of a function — let the final
+expression speak. But early returns inside `if` are common and clear.
+"""
+
+[[exercises]]
+name = "flow_quiz"
+path = "exercises/03_flow/flow_quiz.rs"
+mode = "test"
+hint = """
+A small FizzBuzz-style capstone for chapter 3.
+"""
+# ============== Chapter 4 — Ownership, borrowing, references ================
+
+[[exercises]]
+name = "own1_move"
+path = "exercises/04_ownership/own1_move.rs"
+mode = "test"
+hint = """
+Non-Copy types like String MOVE on assignment or function-call.
+After `let s2 = s1;` or `f(s1)`, the original `s1` is invalidated.
+Use `format!("Hello, {}!", name)` to build a new owned String.
+`String::len()` returns the byte length.
+"""
+
+[[exercises]]
+name = "own2_clone"
+path = "exercises/04_ownership/own2_clone.rs"
+mode = "test"
+hint = """
+`Copy` is implicit (i32, bool, char, …) — assignment duplicates bits for free.
+`Clone` is explicit — you write `.clone()` and pay for an allocation+copy.
+Every Copy type is also Clone, but NOT vice versa: String is Clone, not Copy.
+For i32, just use the value twice — no clone needed.
+"""
+
+[[exercises]]
+name = "own3_functions"
+path = "exercises/04_ownership/own3_functions.rs"
+mode = "test"
+hint = """
+Passing a non-Copy value into a function MOVES it. The caller can no longer use it.
+To "give back" ownership, return the value: `fn f(mut s: String) -> String { ...; s }`.
+String mutators take `&mut self`, so `s.push('!')` works on a `mut s: String`.
+Capture the returned value with `let s = f(s);` (shadowing).
+"""
+
+[[exercises]]
+name = "own4_borrow"
+path = "exercises/04_ownership/own4_borrow.rs"
+mode = "test"
+hint = """
+A shared reference `&T` lets you READ without taking ownership. You can have
+many `&T` to the same value at once — they're all read-only.
+`&String` parameter syntax. The dot operator auto-dereferences.
+For Copy primitives behind a `&`, write `*a + *b` (or just `a + b`, which works
+via `impl Add for &i32`).
+"""
+
+[[exercises]]
+name = "own5_mut_borrow"
+path = "exercises/04_ownership/own5_mut_borrow.rs"
+mode = "test"
+hint = """
+`&mut T` is an EXCLUSIVE borrow — exactly one at a time, no `&T` alongside it.
+Three things must align: `let mut s`, the call site `&mut s`, and the parameter
+type `s: &mut T`. Then methods that take `&mut self` (like `String::push`,
+`Vec::swap`) become available through the reference.
+"""
+
+[[exercises]]
+name = "own6_slice"
+path = "exercises/04_ownership/own6_slice.rs"
+mode = "test"
+hint = """
+A slice is a borrowed view: pointer + length. `&str` for text, `&[T]` for arrays.
+Write `&s[start..end]` to slice. Always prefer `&str` / `&[T]` as parameter types
+over `&String` / `&Vec<T>` — they accept more (literals, sub-slices, arrays).
+`Some((&xs[0], &xs[1..]))` for head + tail.
+"""
+
+[[exercises]]
+name = "own7_dangling"
+path = "exercises/04_ownership/own7_dangling.rs"
+mode = "compile"
+hint = """
+You can't return a reference to a local — the local would be dropped before the
+caller could use the reference. Rust rejects this at compile time (E0515).
+The fix: change the return type to OWNED `String` and return the value itself.
+Ownership transfers to the caller; nothing dangles.
+"""
+
+[[exercises]]
+name = "own_quiz"
+path = "exercises/04_ownership/own_quiz.rs"
+mode = "test"
+hint = """
+Use `>=` for `longest` so ties favour `a` per the spec.
+`String::push_str(&str)` appends; iterate `for p in parts` (p is `&&str` but
+auto-deref handles it). `haystack.matches(needle).count()` counts non-overlapping
+matches. Don't change the `<'a>` signature — lifetimes get a full chapter later.
+"""
+
+# ======================== Chapter 5 — Strings ================================
+
+[[exercises]]
+name = "str1_owned_vs_borrowed"
+path = "exercises/05_strings/str1_owned_vs_borrowed.rs"
+mode = "test"
+hint = """
+Two string types: `String` is owned and heap-allocated; `&str` is a borrowed
+view into existing UTF-8 bytes. String literals like "hello" are `&'static str`.
+For function parameters, prefer `&str` — it accepts both literals and `&String`
+via deref coercion. Return `String` when you need to own/grow the result.
+"""
+
+[[exercises]]
+name = "str2_create"
+path = "exercises/05_strings/str2_create.rs"
+mode = "test"
+hint = """
+Five spellings, one result:
+  String::from("x")    — From trait, very explicit.
+  "x".to_string()      — ToString trait (works on any Display).
+  "x".to_owned()       — ToOwned trait (works on any borrowed type).
+  "x".into()           — type-driven (target type fixes which Into is used).
+  String::with_capacity(n) — empty String, buffer pre-sized for n bytes.
+"""
+
+[[exercises]]
+name = "str3_concat"
+path = "exercises/05_strings/str3_concat.rs"
+mode = "test"
+hint = """
+`+` consumes the left String and borrows the right as &str:  s + &other + "!".
+`format!("Hello, {name}!")` returns a String — best for interpolation.
+Inside loops, `String::push_str(&str)` and `String::push(char)` are cheapest.
+push takes ONE char; push_str takes a string slice.
+"""
+
+[[exercises]]
+name = "str4_iterate"
+path = "exercises/05_strings/str4_iterate.rs"
+mode = "test"
+hint = """
+UTF-8 is variable-width, so `s[0]` is forbidden — pick what you mean:
+  s.len()           — length in BYTES (O(1)).
+  s.chars()         — iterator of Unicode scalar `char`s.
+  s.chars().count() — number of chars (linear scan).
+  s.char_indices()  — (byte_offset, char) pairs — use .nth(n) to find offsets.
+"""
+
+[[exercises]]
+name = "str5_split_join"
+path = "exercises/05_strings/str5_split_join.rs"
+mode = "test"
+hint = """
+Splitters: split(','), splitn, split_whitespace, lines.
+`split_whitespace` collapses runs and drops empty edges — prefer it for words.
+`lines()` handles both \\n and \\r\\n.
+The idiom for transform-and-rejoin:
+    s.split(',').map(|p| f(p)).collect::<Vec<_>>().join(",")
+"""
+
+[[exercises]]
+name = "str6_parse"
+path = "exercises/05_strings/str6_parse.rs"
+mode = "test"
+hint = """
+`s.parse::<T>()` returns `Result<T, _>` — you must annotate the target type
+either via the binding (`let n: i32 = ...`) or with the turbofish.
+Use `.unwrap()` for happy-path / tests, `.unwrap_or(0)` for a default on Err.
+Always `.trim()` untrusted input BEFORE parsing — leading whitespace fails.
+Real error handling (?, custom errors) lands in chapter 8.
+"""
+
+[[exercises]]
+name = "str_quiz"
+path = "exercises/05_strings/str_quiz.rs"
+mode = "test"
+hint = """
+Capstone — combine split_whitespace, to_lowercase, lines, collect, reverse, join.
+For uniqueness without HashSet (later chapter), use a Vec<String> + .contains.
+For reversing lines: collect lines into a Vec<&str>, .reverse(), then .join("\\n")
+so the result has separators BETWEEN lines but no trailing newline.
+"""
+
+# ===================== Chapter 6 — Collections: Vec & HashMap ================
+
+[[exercises]]
+name = "vec1_create"
+path = "exercises/06_collections/vec1_create.rs"
+mode = "test"
+hint = """
+Three ways to build a Vec:
+  Vec::new()                — empty, no allocation yet.
+  vec![1, 2, 3]             — macro for literal contents.
+  Vec::with_capacity(n)     — empty but pre-allocated for n elements.
+Capacity is NOT length. `Vec::with_capacity(10).len()` is 0.
+"""
+
+[[exercises]]
+name = "vec2_index_get"
+path = "exercises/06_collections/vec2_index_get.rs"
+mode = "test"
+hint = """
+v[i] panics if i is out of bounds. v.get(i) returns Option<&T> and never panics.
+Use `.copied()` to turn Option<&T> into Option<T> when T: Copy.
+Prefer `is_empty()` over `len() == 0`.
+"""
+
+[[exercises]]
+name = "vec3_mutate"
+path = "exercises/06_collections/vec3_mutate.rs"
+mode = "test"
+hint = """
+push/pop are O(1) at the end. insert/remove in the middle are O(n) — every
+later element shifts. swap_remove(i) is O(1) but DOESN'T preserve order.
+retain(|x| ...) drops elements that don't match the predicate, in place.
+"""
+
+[[exercises]]
+name = "vec4_iterate"
+path = "exercises/06_collections/vec4_iterate.rs"
+mode = "test"
+hint = """
+Three flavours of iteration:
+  for x in &v       — x: &T   (read-only)
+  for x in &mut v   — x: &mut T (mutate in place; assign with *x = ...)
+  for x in v        — x: T     (consumes the Vec)
+The pattern `for &x in &v` destructures the reference so x: T directly.
+"""
+
+[[exercises]]
+name = "vec5_slicing"
+path = "exercises/06_collections/vec5_slicing.rs"
+mode = "test"
+hint = """
+&v[a..b] is a slice — a borrowed (pointer, length) view, no allocation.
+v.first() / v.last() return Option<&T>. v.chunks(n) yields fixed-size
+sub-slices (last one may be shorter). While the slice exists you can't push.
+"""
+
+[[exercises]]
+name = "map1_create"
+path = "exercises/06_collections/map1_create.rs"
+mode = "test"
+hint = """
+HashMap is not in the prelude — `use std::collections::HashMap;`.
+Insert returns Option<V> (the previous value, if any). get/contains_key/remove
+take a reference to the key. A HashMap<String, _> accepts &str on lookup
+thanks to the Borrow trait — no clone needed to ask "is this key here?".
+"""
+
+[[exercises]]
+name = "map2_entry"
+path = "exercises/06_collections/map2_entry.rs"
+mode = "test"
+hint = """
+The canonical Rust counter pattern:
+  *m.entry(key).or_insert(0) += 1;
+One hash lookup, not two. Use `or_insert_with(|| ...)` when the default
+itself is expensive — the closure only runs if the key was missing.
+"""
+
+[[exercises]]
+name = "collections_quiz"
+path = "exercises/06_collections/collections_quiz.rs"
+mode = "test"
+hint = """
+Capstone — combine everything. Use `text.split_whitespace()` to tokenise
+(it collapses runs of any whitespace), then the `*entry(...).or_insert(0) += 1`
+pattern to count. To find the max, walk `&map` once with a running best.
+Iterator chains like `max_by_key` arrive in chapter 7.
+"""
+
+# ===================== Chapter 9 — Structs & methods =========================
+
+[[exercises]]
+name = "struct1_define"
+path = "exercises/09_structs/struct1_define.rs"
+mode = "test"
+hint = """
+A named-field struct: `struct Point { x: i32, y: i32 }`.
+Build instances with `Point { x: 3, y: 4 }`. When a local variable shares a
+field's name, use field-init shorthand: `Point { x, y }` instead of `x: x`.
+Access fields with `.x` / `.y`. `i32` has an `.abs()` method.
+"""
+
+[[exercises]]
+name = "struct2_tuple"
+path = "exercises/09_structs/struct2_tuple.rs"
+mode = "test"
+hint = """
+Tuple structs have positional fields: `struct UserId(u64);`.
+The newtype pattern wraps a primitive in its own type so the compiler can
+tell `UserId` from `OrderId`. Reach inside with `.0`, wrap back with
+`OrderId(value)`. Bitwise XOR is `^`.
+"""
+
+[[exercises]]
+name = "struct3_unit"
+path = "exercises/09_structs/struct3_unit.rs"
+mode = "test"
+hint = """
+A unit struct has no fields: `struct English;`. It exists so traits can be
+implemented on it as a marker. `std::mem::size_of::<English>()` is `0` —
+unit structs occupy zero bytes. Inside an `impl Greet for English` block,
+`self` is just `&English`; return a `&'static str` literal.
+"""
+
+[[exercises]]
+name = "struct4_impl"
+path = "exercises/09_structs/struct4_impl.rs"
+mode = "test"
+hint = """
+Three receivers:
+  &self      — read-only borrow (most common).
+  &mut self  — exclusive borrow that mutates fields.
+  self       — takes ownership; the value is moved INTO the method.
+You need `let mut c = ...` to call `&mut self` methods. Calling a `self`
+method consumes the binding — you cannot use it afterwards.
+"""
+
+[[exercises]]
+name = "struct5_associated"
+path = "exercises/09_structs/struct5_associated.rs"
+mode = "test"
+hint = """
+Associated functions live in `impl` but take no `self`. Call them with
+`Counter::new()`. Inside the impl, use `Self` (capital S) instead of the
+type name — it's an alias and survives renames. Have other constructors
+delegate to `Self::new()` rather than duplicating the literal.
+"""
+
+[[exercises]]
+name = "struct6_update"
+path = "exercises/09_structs/struct6_update.rs"
+mode = "test"
+hint = """
+`Foo { x: 1, ..other }` means "x from the literal, every other field from
+`other`". The `..other` MUST come last. Combine with field-init shorthand:
+`Config { title, ..base }`. `..base` MOVES non-Copy fields out of `base`,
+which is exactly what you want when the function consumes `base` by value.
+"""
+
+[[exercises]]
+name = "struct_quiz"
+path = "exercises/09_structs/struct_quiz.rs"
+mode = "test"
+hint = """
+Capstone for chapter 9: `Rectangle { width, height }` with `area`,
+`perimeter`, `contains(&self, other: &Rectangle) -> bool`, and an
+associated `Self::square(side)`. Have `square` delegate to `Self::new`.
+`contains` uses `>=` (an equal-sized rectangle fits exactly).
+"""
+
+# ===================== Chapter 10 — Enums & pattern matching =================
+
+[[exercises]]
+name = "enum1_define"
+path = "exercises/10_enums/enum1_define.rs"
+mode = "test"
+hint = """
+An enum is "exactly one of these alternatives". Three variant flavours:
+  - unit:        Foo
+  - tuple:       Foo(T)
+  - named-field: Foo { x: T, y: U }
+Mix them in one enum. Construct with `Shape::Circle(2.0)` or
+`Shape::Rectangle { w: 3.0, h: 4.0 }`. Match arms destructure the payload.
+"""
+
+[[exercises]]
+name = "enum2_match"
+path = "exercises/10_enums/enum2_match.rs"
+mode = "test"
+hint = """
+`match` on an enum must cover EVERY variant — that's exhaustiveness, the
+big win. Use `_` as a wildcard for "everything else", but sparingly on
+enums you own (it disables the new-variant warning).
+The match itself is an expression: `let x = match v { ... };`.
+"""
+
+[[exercises]]
+name = "enum3_methods"
+path = "exercises/10_enums/enum3_methods.rs"
+mode = "test"
+hint = """
+Enums get methods via `impl Light { fn next(&self) -> Light { match self { ... } } }`.
+`&self` is a read-only borrow. Inside, `match self` matches on the variant.
+For "is this exactly variant X?" reach for `matches!(self, Light::Green)`.
+"""
+
+[[exercises]]
+name = "match1_patterns"
+path = "exercises/10_enums/match1_patterns.rs"
+mode = "test"
+hint = """
+Pattern toolkit:
+  `1 | 2 | 3`     — alternatives ("or-patterns")
+  `1..=9`         — inclusive range pattern
+  `x @ 1..=9`     — match the range AND bind the value to `x`
+Arms are tried top-to-bottom; order matters when patterns overlap.
+"""
+
+[[exercises]]
+name = "match2_destructure"
+path = "exercises/10_enums/match2_destructure.rs"
+mode = "test"
+hint = """
+Patterns work on any composite value. Tuple: `(0, 0)`, `(_, 0)`, `(x, y)`.
+Struct: `Point { x: 0, y: 0 }`, `Point { x, y: 0 }`. Use `_` to ignore a
+field and `..` to ignore the rest. Patterns nest freely.
+"""
+
+[[exercises]]
+name = "match3_guards"
+path = "exercises/10_enums/match3_guards.rs"
+mode = "test"
+hint = """
+A guard is `if cond` after the pattern: `Some(x) if x > 0 => ...`.
+Use guards when the decision depends on the VALUE, not just the shape.
+Guards do NOT count toward exhaustiveness — you'll need a guardless
+fallback arm to cover the remaining cases.
+"""
+
+[[exercises]]
+name = "match4_iflet_whilelet"
+path = "exercises/10_enums/match4_iflet_whilelet.rs"
+mode = "test"
+hint = """
+Lighter alternatives to `match`:
+  `if let Some(x) = opt { ... } else { ... }`   — one pattern of interest.
+  `let Ok(n) = parse() else { return 0; };`    — extract or bail (else
+                                                  block must diverge).
+  `while let Some(x) = v.pop() { ... }`         — loop while pattern fits.
+"""
+
+[[exercises]]
+name = "enum_quiz"
+path = "exercises/10_enums/enum_quiz.rs"
+mode = "test"
+hint = """
+Capstone: a vending machine state machine. `VendingMachine::Idle`,
+`Selected(Drink)`, `Dispensing`. Transitions take `self` and return the
+next state — invalid transitions return `other => other` unchanged.
+`current_drink` returns `Some(d)` only in `Selected`. Derive `Copy` and
+`PartialEq` on both enums so the tests can compare states cheaply.
+"""
+
+# ====================== Chapter 16 — Closures & function traits ===============
+
+[[exercises]]
+name = "closure1_basics"
+path = "exercises/16_closures/closure1_basics.rs"
+mode = "test"
+hint = """
+Closure syntax: `|x| x + 1`. Parameter and return types are inferred from
+the first call. Closures CAPTURE names from the surrounding scope —
+by reference if reading, by mutable reference if mutating, by value if
+the body moves the captured value out. Use `move` to FORCE capture by
+value (needed when the closure outlives its scope, e.g. when returned).
+"""
+
+[[exercises]]
+name = "closure2_traits"
+path = "exercises/16_closures/closure2_traits.rs"
+mode = "test"
+hint = """
+Three closure traits, ordered most-to-least permissive bound:
+  Fn      — read-only captures, callable through &F.
+  FnMut   — may mutate captures, callable through &mut F.
+  FnOnce  — may consume captures, callable exactly once (consumes F).
+Hierarchy: every Fn is FnMut is FnOnce. As a function author, pick the
+WEAKEST bound that does the job — that lets callers pass the most.
+"""
+
+[[exercises]]
+name = "closure3_returning"
+path = "exercises/16_closures/closure3_returning.rs"
+mode = "test"
+hint = """
+Returning a closure: `-> impl Fn(i32) -> i32` for static dispatch (one
+concrete closure type, zero overhead). Use `Box<dyn Fn(i32) -> i32>` when
+different branches return DIFFERENT closure types — `impl Trait` can only
+be one concrete type, but `dyn` erases the type behind a vtable.
+"""
+
+[[exercises]]
+name = "closure4_higher_order"
+path = "exercises/16_closures/closure4_higher_order.rs"
+mode = "test"
+hint = """
+Take a closure as a parameter four ways:
+  fn f<F: Fn(i32) -> i32>(g: F)               — generic + inline bound
+  fn f<F>(g: F) where F: Fn(i32) -> i32       — generic + where clause
+  fn f(g: impl Fn(i32) -> i32)                — sugar for the above
+  fn f(g: &dyn Fn(i32) -> i32)                — dynamic dispatch
+For an FnMut parameter you must bind it as `mut g: G` to call it.
+"""
+
+[[exercises]]
+name = "closure5_iterator_combo"
+path = "exercises/16_closures/closure5_iterator_combo.rs"
+mode = "test"
+hint = """
+Closures + iterators are the workhorse pairing.
+  .map(|x| ...)        — transform each element
+  .filter(|&x| ...)    — keep elements (closure receives &T)
+  .fold(init, |acc, x| ...) — reduce to a single value
+  .max_by_key(|x| ...) — pick the element with the largest key
+Closures shine because they capture local context (thresholds, biases)
+that named functions would have to receive as extra arguments.
+"""
+
+[[exercises]]
+name = "closures_quiz"
+path = "exercises/16_closures/closures_quiz.rs"
+mode = "test"
+hint = """
+Capstone. `make_counter()` returns `impl FnMut() -> u32`: a closure that
+owns its `count` (use `move`) and bumps it on each call. `EventBus`
+stores handlers as `Vec<Box<dyn FnMut(&str)>>` because each handler has
+a different anonymous type — type-erase via `dyn`, heap-allocate via
+`Box`. `register<F: FnMut(&str) + 'static>` boxes for the caller; `fire`
+takes `&mut self` so it can call FnMut handlers through `iter_mut`.
+"""
+# ===================== Chapter 7 — Iterators =================================
+
+[[exercises]]
+name = "iter1_basics"
+path = "exercises/07_iterators/iter1_basics.rs"
+mode = "test"
+hint = """
+Iterator is a trait with one required method: `fn next(&mut self) -> Option<Item>`.
+A `for` loop is sugar for `loop { match it.next() { Some(x)=>..., None=>break } }`.
+`xs.iter()` yields `&T`; tack `.copied()` (T: Copy) or `.cloned()` to get owned items.
+The iterator binding must be `mut` because `next` mutates internal state.
+"""
+
+[[exercises]]
+name = "iter2_map_filter"
+path = "exercises/07_iterators/iter2_map_filter.rs"
+mode = "test"
+hint = """
+`.map(|x| ...)` and `.filter(|x| ...)` are ADAPTERS — they return new iterators
+and run NOTHING until you call a terminator (`.collect`, `.sum`, `.count`,
+`.for_each`, `.fold`, ...). `filter`'s closure receives a REFERENCE to the
+item, so over an `i32` stream write `|&x| ...`; over an `&i32` stream `|&&x|`.
+"""
+
+[[exercises]]
+name = "iter3_fold_sum"
+path = "exercises/07_iterators/iter3_fold_sum.rs"
+mode = "test"
+hint = """
+`.sum()`, `.product()`, `.count()` are specialised reducers. `.fold(init, |acc, x| ...)`
+is the general form — every reducer is a fold in disguise. Annotate the
+result type (binding or turbofish) for sum/product since std can't tell which
+numeric type you want. count returns `usize`.
+"""
+
+[[exercises]]
+name = "iter4_collect"
+path = "exercises/07_iterators/iter4_collect.rs"
+mode = "test"
+hint = """
+`.collect()` materialises an iterator into anything implementing `FromIterator`:
+`Vec<T>`, `String` (from chars or &strs), `HashMap<K,V>` (from `(K,V)` pairs),
+`HashSet<T>`, ... Tell it the target via the binding type or turbofish
+(`.collect::<Vec<_>>()`). Magic trick: an iterator of `Result<T,E>` collects
+into `Result<Vec<T>, E>` and SHORT-CIRCUITS on the first Err.
+"""
+
+[[exercises]]
+name = "iter5_zip_enumerate"
+path = "exercises/07_iterators/iter5_zip_enumerate.rs"
+mode = "test"
+hint = """
+`.enumerate()` yields `(index, item)`. `.zip(other)` pairs items 1:1 and
+stops at the shorter side. `.chain(other)` concatenates. `.take(n)` /
+`.skip(n)` / `.step_by(k)` crop. `(0..)` is an infinite range — make it
+finite with `.take(n)`. argmax idiom: `.iter().enumerate().max_by_key(|(_, v)| **v)`.
+"""
+
+[[exercises]]
+name = "iter6_find_any_all"
+path = "exercises/07_iterators/iter6_find_any_all.rs"
+mode = "test"
+hint = """
+Short-circuit terminators: `.find(|&&x| ...)` first match, `.position(...)`
+its index, `.any(...)` / `.all(...)` boolean checks, `.max_by_key(|x| ...)`
+biggest by key. GOTCHA: `find` and `filter` take their item by REFERENCE
+(`|&&x|` over `&i32`); `any`, `all`, `position` take it BY VALUE (`|&x|`).
+On empty: `any` is false, `all` is true (vacuous), max/min return None.
+"""
+
+[[exercises]]
+name = "iter7_flat_map"
+path = "exercises/07_iterators/iter7_flat_map.rs"
+mode = "test"
+hint = """
+`.flatten()` collapses an "iterator of iterators" into one stream — works on
+nested Vecs AND on `Vec<Option<T>>` (Option is itself IntoIterator yielding
+0 or 1). `.flat_map(|x| iter)` is `.map(...).flatten()` in one call: use it
+when one input produces ZERO OR MORE outputs. `text.lines().flat_map(|l| l.split_whitespace())`.
+"""
+
+[[exercises]]
+name = "iter8_custom"
+path = "exercises/07_iterators/iter8_custom.rs"
+mode = "test"
+hint = """
+Implement Iterator on your own struct: pick `type Item = ...;` then write
+`fn next(&mut self) -> Option<Self::Item>`. Returning `None` once means done.
+Once `next` exists, every combinator (`map`, `take`, `filter`, `sum`, `nth`, ...)
+is FREE. Compute the next state into a local before overwriting fields, or
+the old `a` is gone before you've used it.
+"""
+
+[[exercises]]
+name = "iter_quiz"
+path = "exercises/07_iterators/iter_quiz.rs"
+mode = "test"
+hint = """
+Capstone — rewrite chapter 3 as iterator chains. count_evens: `(0..=n).filter(...).count()`.
+first_above: `xs.iter().copied().find(...)`. fizzbuzz: `(1..=n).map(|i| match (i%3, i%5) { ... }).collect()`.
+sum_of_squares_of_evens: filter then map then sum. Each function fits in one chain — feel
+how much shorter it is than the explicit-loop version.
+"""
+
+# ===================== Chapter 8 — Option, Result & the ? operator ===========
+
+[[exercises]]
+name = "opt1_basics"
+path = "exercises/08_errors/opt1_basics.rs"
+mode = "test"
+hint = """
+Option<T> is `Some(T) | None` — Rust's `null` replacement, but type-checked.
+`is_some` / `is_none` are zero-cost discriminant checks.
+`unwrap()` returns the inner T or PANICS on None — fine for tests, loud in prod.
+`expect("msg")` is `unwrap` with a custom panic message — strictly better.
+"""
+
+[[exercises]]
+name = "opt2_match"
+path = "exercises/08_errors/opt2_match.rs"
+mode = "test"
+hint = """
+`match opt { Some(x) => ..., None => ... }` — the compiler enforces both arms.
+The `Some(x)` pattern BINDS the inner value with type `T` (no unwrap needed).
+Guards (`Some(n) if n > 0 => ...`) refine a pattern but don't count toward
+exhaustiveness — keep a guardless fallback arm.
+"""
+
+[[exercises]]
+name = "opt3_combinators"
+path = "exercises/08_errors/opt3_combinators.rs"
+mode = "test"
+hint = """
+`map` transforms the value if there is one. `unwrap_or(d)` extracts or
+substitutes (eager). `unwrap_or_else(|| ...)` is the lazy form for non-trivial
+defaults. `unwrap_or_default()` uses `T::default()` (0, "", empty Vec, ...).
+Chains read left-to-right; each step preserves the Option shape until the
+final `unwrap_or` extracts a plain T.
+"""
+
+[[exercises]]
+name = "res1_basics"
+path = "exercises/08_errors/res1_basics.rs"
+mode = "test"
+hint = """
+Result<T, E> is `Ok(T) | Err(E)` — value or REASON. Return Result for expected
+failures (parsing, IO); panic only for impossible states / invariant breaches.
+`is_ok` / `is_err` for predicates. `.unwrap()` panics on Err and includes the
+Err's Debug in the message; `.expect("msg")` adds your own context first.
+"""
+
+[[exercises]]
+name = "res2_question_mark"
+path = "exercises/08_errors/res2_question_mark.rs"
+mode = "test"
+hint = """
+`expr?` desugars to `match expr { Ok(v) => v, Err(e) => return Err(From::from(e)) }`.
+The function MUST return `Result<_, _>` (or Option) for `?` to compile.
+Chain multiple `?` calls: the first failure short-circuits the whole expression.
+Wrap the trailing success in `Ok(...)` because the function's return type is
+Result, even though `?` already extracted the inner T.
+"""
+
+[[exercises]]
+name = "res3_combinators"
+path = "exercises/08_errors/res3_combinators.rs"
+mode = "test"
+hint = """
+`map` transforms Ok; `map_err` transforms Err — pair `map_err` with `?` to
+translate child errors at function boundaries. `and_then` chains another
+fallible step. `or_else` recovers from an error. `.ok()` and `.err()` pivot
+between Result and Option when you only care about one side.
+"""
+
+[[exercises]]
+name = "res4_from"
+path = "exercises/08_errors/res4_from.rs"
+mode = "test"
+hint = """
+The `?` desugaring calls `From::from(err)` on the way out. Define a parent
+error enum, `#[derive(Debug)]` it, and write `impl From<ChildErr> for ParentErr`
+for each foreign error you want to bubble up. Then `?` lifts child errors into
+the parent type automatically — adding new error categories is purely additive.
+No thiserror, no `Box<dyn Error>` here — that's chapter 15.
+"""
+
+[[exercises]]
+name = "errors_quiz"
+path = "exercises/08_errors/errors_quiz.rs"
+mode = "test"
+hint = """
+Capstone — parse `port=8080\\nhost=localhost`. Define a `Config` struct and a
+4-variant `ConfigError` (MissingEquals, UnknownKey, BadPort wrapping
+ParseIntError, Missing carrying a `&'static str`). One `impl From<ParseIntError>`
+lets `value.parse::<u16>()?` work. `line.split_once('=').ok_or_else(...)?`
+pivots Option->Result. Track required keys as `Option<T>` and `ok_or` them
+after the loop. The whole function uses `?` — no nested matches.
+"""
+
+# ====================== Chapter 11 — Traits & generics =======================
+
+[[exercises]]
+name = "trait1_define"
+path = "exercises/11_traits/trait1_define.rs"
+mode = "test"
+hint = """
+A trait is a named set of behaviours. REQUIRED methods give only the
+signature (ending in `;`) and force every implementor to fill them in.
+DEFAULT methods come with a body that implementors may override or keep.
+Define `Greet` with `name(&self) -> &str` required, and a defaulted
+`greeting(&self) -> String` whose body is `format!("Hello, {}!", self.name())`.
+Then `impl Greet for Dog { fn name(&self) -> &str { &self.name } }`.
+"""
+
+[[exercises]]
+name = "trait2_impl"
+path = "exercises/11_traits/trait2_impl.rs"
+mode = "test"
+hint = """
+You write one `impl Trait for Type` block per (trait, type) pair. The
+same trait can be implemented for many types, and an impl can OVERRIDE
+default methods just by writing a body for them. Cat keeps the default
+`greeting`; Robot overrides it. Reuse `self.name()` in the override
+rather than reaching directly into struct fields.
+"""
+
+[[exercises]]
+name = "trait3_derive"
+path = "exercises/11_traits/trait3_derive.rs"
+mode = "test"
+hint = """
+`#[derive(...)]` asks the compiler to generate trait impls field-by-field.
+Tag must be:
+  Debug          — `{:?}`
+  Clone          — `.clone()`
+  PartialEq + Eq — `assert_eq!`, and HashSet keys (Eq is the marker that
+                   says equality is total — required by hash collections)
+  Hash           — also required for HashSet membership
+  Default        — `Tag::default()`
+One single derive line covers all six.
+"""
+
+[[exercises]]
+name = "gen1_functions"
+path = "exercises/11_traits/gen1_functions.rs"
+mode = "test"
+hint = """
+Generic functions: `fn largest<T: PartialOrd>(xs: &[T]) -> &T`. The bound
+unlocks operations on T inside the body — `>` is a method on PartialOrd,
+so without the bound the comparison wouldn't compile. The compiler
+MONOMORPHIZES: one specialised copy of the function per concrete T at
+the call sites (i32, f64, char, …). Zero runtime cost, slightly larger
+binary. Prefer the WEAKEST bound that lets the body compile — PartialOrd
+accepts f64 (which Ord rejects).
+"""
+
+[[exercises]]
+name = "gen2_bounds"
+path = "exercises/11_traits/gen2_bounds.rs"
+mode = "test"
+hint = """
+Multiple bounds with `+`: `T: Display + Clone`. Use a `where` clause
+once you have more than one bound or more than one type parameter — it
+keeps signatures readable and is the style-guide recommendation. Each
+type parameter gets its own row inside the where clause. `{}` is Display;
+`{:?}` is Debug — pick the trait that matches your format strings.
+"""
+
+[[exercises]]
+name = "gen3_structs"
+path = "exercises/11_traits/gen3_structs.rs"
+mode = "test"
+hint = """
+Generic struct: `struct Pair<T> { a: T, b: T }`. The impl block also
+declares the parameter: `impl<T> Pair<T> { ... }`. CONDITIONAL impls
+add a bound to the impl, not the struct: `impl<T: Display> Pair<T>` —
+methods inside that block exist ONLY when T: Display. The unconditional
+new/into_tuple work for any T; only `show` requires Display.
+Rule of thumb: bound the impl, not the type — that keeps the struct
+itself usable for non-Display types.
+"""
+
+[[exercises]]
+name = "trait4_objects"
+path = "exercises/11_traits/trait4_objects.rs"
+mode = "test"
+hint = """
+A trait object `dyn Animal` is a fat pointer (data + vtable). Use it
+through `Box<dyn Animal>` for owned or `&dyn Animal` for borrowed.
+`Vec<Box<dyn Animal>>` is the canonical heterogeneous-collection shape:
+mix Dogs, Cats, Parrots, all behind one Vec. Calls go through the vtable
+(dynamic dispatch) — slightly slower per call than generics, but lets
+you keep different concrete types in one collection. Static (`<T: Trait>`)
+for hot loops over one type; dynamic (`dyn Trait`) for plugin-style mixes.
+"""
+
+[[exercises]]
+name = "trait5_object_safety"
+path = "exercises/11_traits/trait5_object_safety.rs"
+mode = "compile"
+hint = """
+A trait is OBJECT-SAFE (i.e. usable as `dyn Trait`) only if every method
+in its vtable has a pointer-shaped self (&self, &mut self, Box<Self>...),
+no `Self` outside the receiver, and no generic type parameters of its
+own. Methods that violate the rules can SURVIVE in the trait if you add
+`where Self: Sized` — that excludes them from the vtable but keeps them
+callable on concrete types. Generics on a trait method can't be rescued
+that way; just remove the method (or move it to a free function that
+takes `&dyn Trait`). This file is compile-mode: passing means it builds.
+"""
+
+[[exercises]]
+name = "traits_quiz"
+path = "exercises/11_traits/traits_quiz.rs"
+mode = "test"
+hint = """
+Capstone: `trait Shape { fn area(&self) -> f64; }` plus Circle (πr²),
+Rectangle (w·h), Triangle (½·b·h). Two summing functions:
+  total_area_static<S: Shape>(&[S])           — homogeneous, static dispatch
+  total_area_dyn(&[Box<dyn Shape>])           — heterogeneous, dynamic
+Both bodies are the same loop; the signatures encode the dispatch style.
+Use `std::f64::consts::PI`. Areas are sums of `s.area()` over the slice.
+"""
+
+# ====================== Chapter 12 — Modules, crates, Cargo ==================
+
+[[exercises]]
+name = "mod1_basics"
+path = "exercises/12_modules/mod1_basics.rs"
+mode = "test"
+hint = """
+A module is `mod NAME { ... }` — a named container for items. Items are
+PRIVATE by default; mark `pub fn` / `pub struct` / `pub mod` to expose them.
+Outside the module, reach in with the `::` path operator: `greeter::hello()`.
+In a real Cargo project this same module would live at `src/greeter.rs` and
+be declared with `mod greeter;` from the parent — same semantics, different
+file layout. The runner here compiles a single file, so we use inline blocks.
+"""
+
+[[exercises]]
+name = "mod2_paths"
+path = "exercises/12_modules/mod2_paths.rs"
+mode = "test"
+hint = """
+Three relative path keywords:
+  self::    — this module
+  super::   — the parent module
+  crate::   — the crate root (absolute)
+Nested modules give nested paths: `crate::a::b::thing`. `use crate::a::b::thing;`
+brings ONE name into local scope so you can call it unqualified. `use` only
+creates a local alias — it does not change visibility. If `thing` were
+private, the `use` itself would fail.
+"""
+
+[[exercises]]
+name = "mod3_visibility"
+path = "exercises/12_modules/mod3_visibility.rs"
+mode = "test"
+hint = """
+`pub` is a scope you dial in:
+  pub          — visible everywhere the parent is.
+  pub(crate)   — visible inside this crate, not exported beyond it.
+  pub(super)   — visible only to the parent module.
+Struct field visibility is INDEPENDENT of the struct's visibility — `pub
+struct Foo { pub a: T, b: U }` exposes `a` but keeps `b` private. That's
+the encapsulation lever: private fields force outside callers through your
+methods, where you can enforce invariants. The classic pattern is a getter
+returning the value (Copy types) or `&` to it.
+"""
+
+[[exercises]]
+name = "mod4_re_export"
+path = "exercises/12_modules/mod4_re_export.rs"
+mode = "test"
+hint = """
+`pub use crate::path::Item;` re-exports a name from the current module's
+public surface — it's both a `use` (local alias) and a `pub` (export). The
+FACADE pattern uses this to organise a crate by implementation internally
+(`mod parser`, `mod lexer`) while exposing a curated `pub mod api` to users.
+Re-exports are zero-cost — the compiler treats them as aliases, no wrapper
+function generated. You can rename on re-export with `as`.
+"""
+
+[[exercises]]
+name = "cargo1_dependencies"
+path = "exercises/12_modules/cargo1_dependencies.rs"
+mode = "compile"
+hint = """
+A reading exercise. Skim the long teaching block: it covers Cargo.toml
+layout (`[package]`, `[dependencies]`, `[dev-dependencies]`), semver
+requirements (`"1.0"` means ">=1.0.0, <2.0.0"; `"0.x"` minor bumps are
+breaking), features (`{ version = "1", features = ["derive"] }`), and the
+key commands — `cargo new`, `cargo add`, `cargo build`, `cargo test`,
+`cargo check`, `cargo doc`. Once you've read it, just delete the
+`// I AM NOT DONE` line — the code itself is trivial.
+"""
+
+[[exercises]]
+name = "modules_quiz"
+path = "exercises/12_modules/modules_quiz.rs"
+mode = "test"
+hint = """
+Capstone for chapter 12. Build `mod math` with three children:
+  geometry — Circle { radius }, Rectangle { width, height }, each with `area`.
+             Keep PI as a PRIVATE constant.
+  stats    — sum(&[f64]) -> f64, mean(&[f64]) -> Option<f64> (None on empty).
+  prelude  — `pub use` the four user-facing names (Circle, Rectangle,
+             mean, sum) so callers can `use math::prelude::*` once.
+The deep paths (`math::geometry::Circle`) keep working alongside the
+prelude — `pub use` ADDS names, doesn't remove the originals.
+"""
+
+# ===================== Chapter 13 — Smart pointers ===========================
+
+[[exercises]]
+name = "box1_basics"
+path = "exercises/13_smart_pointers/box1_basics.rs"
+mode = "test"
+hint = """
+`Box<T>` heap-allocates a single `T` and owns it. Build with `Box::new(x)`,
+read through `*b` (T must be Copy or you'll be moving). The classic motivation
+is recursive types: `enum List { Cons(i32, Box<List>), Nil }` — without the
+Box, the size is infinite. `&Box<T>` deref-coerces to `&T` so methods that
+expect a reference Just Work.
+"""
+
+[[exercises]]
+name = "box2_dyn"
+path = "exercises/13_smart_pointers/box2_dyn.rs"
+mode = "test"
+hint = """
+`Box<dyn Trait>` is the OWNED trait object — a fat (data, vtable) pointer
+that lets you store heterogeneous concrete types in one collection:
+`Vec<Box<dyn Animal>>`. The compiler unsizes `Box<Dog>` -> `Box<dyn Animal>`
+implicitly at the assignment site. Calls go through the vtable (dynamic
+dispatch); for hot loops prefer `impl Trait` for static dispatch instead.
+"""
+
+[[exercises]]
+name = "rc1_basics"
+path = "exercises/13_smart_pointers/rc1_basics.rs"
+mode = "test"
+hint = """
+`Rc<T>` = reference-counted shared ownership, single-threaded. `Rc::clone(&rc)`
+bumps the strong count (cheap — no T copy); drop decrements; allocation frees
+when the count hits 0. Inspect with `Rc::strong_count(&rc)`. `Rc::ptr_eq` to
+test "same allocation". To deep-clone the inner T, call `T::clone` explicitly
+— `rc.clone()` resolves to `Rc::clone`. NOT `Send` — for threads use `Arc`.
+"""
+
+[[exercises]]
+name = "refcell1_basics"
+path = "exercises/13_smart_pointers/refcell1_basics.rs"
+mode = "test"
+hint = """
+`RefCell<T>` moves the borrow checker to RUNTIME. `borrow()` returns `Ref<T>`
+(many at once allowed); `borrow_mut()` returns `RefMut<T>` (exclusive). Two
+overlapping `borrow_mut`s PANIC. Use `try_borrow_mut()` for a non-panicking
+probe. Single-threaded only (`!Sync`); for threads use `Mutex`. Hold guards
+briefly — drop them as soon as the read/write is done.
+"""
+
+[[exercises]]
+name = "rc_refcell"
+path = "exercises/13_smart_pointers/rc_refcell.rs"
+mode = "test"
+hint = """
+`Rc<RefCell<T>>` is the canonical "many owners that all can mutate" pattern.
+Each owner stores its own `Rc`; mutation goes `*rc.borrow_mut() += 1`, which
+auto-derefs the Rc to the RefCell, takes the runtime mutable borrow, and
+mutates. Construct with `Rc::new(RefCell::new(value))` and pass clones into
+each owner: `Bumper::new(Rc::clone(&shared))`. Strong count tracks owners.
+"""
+
+[[exercises]]
+name = "arc1_basics"
+path = "exercises/13_smart_pointers/arc1_basics.rs"
+mode = "test"
+hint = """
+`Arc<T>` = `Rc<T>` with an ATOMIC counter — `Send + Sync` and safe to share
+across threads. Same API: `Arc::new`, `Arc::clone(&a)`, `Arc::strong_count`,
+`Arc::ptr_eq`. Pick `Rc` for single-threaded code (slightly cheaper) and
+`Arc` whenever threads are involved. For thread-safe MUTATION pair with
+`Mutex<T>` -> `Arc<Mutex<T>>`; full concurrency story is chapter 14.
+"""
+
+[[exercises]]
+name = "smart_quiz"
+path = "exercises/13_smart_pointers/smart_quiz.rs"
+mode = "test"
+hint = """
+Capstone: a tree where children are `Vec<Rc<RefCell<Node>>>` (owning,
+mutable) and parent is `Weak<RefCell<Node>>` to break the Rc cycle.
+`Rc::downgrade(rc)` makes a `Weak`; `weak.upgrade()` returns `Option<Rc>`
+(`None` once the parent is dropped). Wrap the parent FIELD in `RefCell` so
+you can set it after construction. This is THE shape for any safe-Rust
+tree/graph; arenas (Vec + indices) are the perf-oriented alternative.
+"""
+
+# ===================== Chapter 17 — Lifetimes deep-dive ======================
+
+[[exercises]]
+name = "lt1_intro"
+path = "exercises/17_lifetimes/lt1_intro.rs"
+mode = "compile"
+hint = """
+A lifetime is a REGION OF CODE — a scope — not a duration in seconds. The
+borrow checker proves that every reference is used only inside the scope
+its referent is alive. The fix here is structural: pull `s` up into the
+outer scope so it lives at least as long as the reference into it.
+No `'a` annotation is needed; just give the value a long enough scope.
+"""
+
+[[exercises]]
+name = "lt2_function"
+path = "exercises/17_lifetimes/lt2_function.rs"
+mode = "test"
+hint = """
+`fn longer_of<'a>(a: &'a str, b: &'a str) -> &'a str` — read as "for some
+region 'a, both inputs are valid for at least 'a and the output is valid
+for exactly 'a." Annotations don't affect runtime; they only let the
+compiler check the constraint. With two input refs and an output ref,
+elision can't pick — you must spell out the shared `'a`.
+"""
+
+[[exercises]]
+name = "lt3_elision"
+path = "exercises/17_lifetimes/lt3_elision.rs"
+mode = "compile"
+hint = """
+The three elision rules:
+  1. Each input ref gets its own fresh lifetime.
+  2. If there's exactly ONE input ref, the output gets that lifetime.
+  3. If `&self`/`&mut self` is present, the output gets self's lifetime.
+When elision can't fill in an output ref's lifetime (e.g., two input refs,
+no &self), either annotate explicitly or sidestep by returning an OWNED
+value like `String`.
+"""
+
+[[exercises]]
+name = "lt4_struct"
+path = "exercises/17_lifetimes/lt4_struct.rs"
+mode = "test"
+hint = """
+A struct that holds a reference is parameterized by the reference's
+lifetime: `struct Excerpt<'a> { part: &'a str }`. Such a struct cannot
+outlive the data it borrows — the compiler enforces that. Repeat the
+parameter in the impl block: `impl<'a> Excerpt<'a> { ... }`. Inside
+methods, Rule 3 elision usually saves you from writing `'a` again.
+"""
+
+[[exercises]]
+name = "lt5_static"
+path = "exercises/17_lifetimes/lt5_static.rs"
+mode = "test"
+hint = """
+`'static` means "lives for the whole program." String literals are
+`&'static str` — they live in the binary's read-only data. Not every
+`&str` you can name is `'static`: a slice of a runtime-allocated `String`
+is NOT `'static`. The bound `T: 'static` is different — it means "T
+contains no borrows shorter than 'static." Owned types like `String`,
+`i32`, and `Vec<u8>` satisfy `T: 'static` trivially.
+"""
+
+[[exercises]]
+name = "lt6_subtyping"
+path = "exercises/17_lifetimes/lt6_subtyping.rs"
+mode = "test"
+hint = """
+A reference that lives LONGER can stand in where a SHORTER one is needed
+— that's covariance in the lifetime parameter. So a `&'static str`
+(literal) works fine where any old `&str` is expected. The reverse never
+works: you can't pass a short-lived ref where a longer one is required.
+A function taking `Fn(&str)` accepts callbacks regardless of input
+lifetime — under the hood it's `for<'a> Fn(&'a str)`.
+"""
+
+[[exercises]]
+name = "lifetimes_quiz"
+path = "exercises/17_lifetimes/lifetimes_quiz.rs"
+mode = "test"
+hint = """
+Capstone: `Parser<'a>` holds a slice of input plus a byte cursor.
+`peek` and `advance` return `Option<char>`; advance by `c.len_utf8()`,
+not by 1, so multibyte UTF-8 doesn't desync the cursor.
+The KEY signature is `take_while<P>(&mut self, pred: P) -> &'a str` —
+NOT `&str`. The explicit `'a` overrides Rule 3 elision so the result
+borrows from the original input, not from `&self`. That lets the slice
+outlive the parser itself.
+"""
+# ====================== Chapter 14 — Concurrency =============================
+
+[[exercises]]
+name = "thread1_spawn"
+path = "exercises/14_concurrency/thread1_spawn.rs"
+mode = "test"
+hint = """
+`thread::spawn(|| ...)` returns a `JoinHandle<T>`; `handle.join().unwrap()`
+waits for the thread and unwraps its result (panicking if the thread did).
+The closure must be `Send + 'static` — write `move ||` to capture by value
+so the closure owns everything it touches and can outlive the spawning frame.
+"""
+
+[[exercises]]
+name = "thread2_move"
+path = "exercises/14_concurrency/thread2_move.rs"
+mode = "test"
+hint = """
+Without `move`, a closure captures by reference — and a borrow into the
+spawning frame can't satisfy `'static`, so `thread::spawn` rejects it.
+`move ||` switches every capture to BY-VALUE: the Vec / String travels
+into the new thread, the spawner can no longer use it. One owner, one
+thread — that's the rule.
+"""
+
+[[exercises]]
+name = "chan1_mpsc"
+path = "exercises/14_concurrency/chan1_mpsc.rs"
+mode = "test"
+hint = """
+`mpsc::channel()` returns `(Sender, Receiver)`. `tx.send(v)` is non-blocking
+on the unbounded variant; `rx.recv()` BLOCKS until a value arrives or every
+Sender has been dropped (then it returns `Err(RecvError)` — the canonical
+"channel closed" signal). Drop the only sender to test that closure.
+"""
+
+[[exercises]]
+name = "chan2_iter"
+path = "exercises/14_concurrency/chan2_iter.rs"
+mode = "test"
+hint = """
+`for msg in rx { ... }` is the idiomatic drain — the receiver is itself an
+iterator that ends when the channel closes. `Sender` is `Clone`, so each
+producer thread takes its own clone via `tx.clone()`. Don't forget to
+`drop(tx)` on the original sender, or the loop will wait forever for a
+sender that never dies.
+"""
+
+[[exercises]]
+name = "mutex1_basics"
+path = "exercises/14_concurrency/mutex1_basics.rs"
+mode = "test"
+hint = """
+`Mutex::new(v)` wraps a value; `m.lock().unwrap()` blocks until the lock is
+free, then returns a `MutexGuard` that derefs to `&mut T`. The guard's
+Drop releases the lock — there is no `unlock()` method. Hold the lock for
+the SHORTEST useful window. `.unwrap()` panics on a poisoned mutex (the
+previous holder panicked); fine for tests.
+"""
+
+[[exercises]]
+name = "arc_mutex"
+path = "exercises/14_concurrency/arc_mutex.rs"
+mode = "test"
+hint = """
+`Arc<Mutex<T>>` is THE shared-mutable-state pattern. Build it once with
+`Arc::new(Mutex::new(...))`, then `Arc::clone(&counter)` per worker
+thread — cloning the Arc only bumps the atomic refcount, the Mutex stays
+put. Each worker locks, mutates, drops the guard. Join everyone before
+you read the final value through one last lock.
+"""
+
+[[exercises]]
+name = "send_sync"
+path = "exercises/14_concurrency/send_sync.rs"
+mode = "compile"
+hint = """
+`Send` = "movable to another thread"; `Sync` = "shareable as `&T` across
+threads" (equivalently, `&T: Send`). Both are auto-traits — the compiler
+implements them for you. `Rc<T>` is `!Send` (non-atomic refcount, would
+race); `Arc<T>` is `Send + Sync`. The fix here is two edits: the import
+(`std::rc::Rc` -> `std::sync::Arc`) and the constructor.
+"""
+
+[[exercises]]
+name = "concurrency_quiz"
+path = "exercises/14_concurrency/concurrency_quiz.rs"
+mode = "test"
+hint = """
+Capstone: a fixed-size thread pool with two channels — jobs (main->workers)
+and results (workers->main). `Receiver` isn't `Clone`, so wrap the jobs
+side in `Arc<Mutex<Receiver>>` and have each worker take the lock just
+long enough to grab one job. Drop the original `jobs_tx` and `results_tx`
+in main so each channel can close once its producers exit. Sum the
+per-line word counts as they arrive — `split_whitespace().count()` is
+the right per-line counter.
+"""
+
+# ===================== Chapter 15 — Errors at scale ==========================
+
+[[exercises]]
+name = "err1_custom_enum"
+path = "exercises/15_errors_at_scale/err1_custom_enum.rs"
+mode = "test"
+hint = """
+Define a domain `enum MyError` with three variants: `NotFound` (unit),
+`Invalid(String)`, and `Io(std::io::Error)`. `#[derive(Debug)]` is mandatory
+— `unwrap`, `assert_eq!`, and `?`-in-tests all print errors via Debug.
+We're not using `?` yet, so manually wrap io errors with
+`Err(MyError::Io(e))` in the `Err` arm. Each variant names a category your
+caller will distinguish; carry the structured cause, never stringify it.
+"""
+
+[[exercises]]
+name = "err2_display_error"
+path = "exercises/15_errors_at_scale/err2_display_error.rs"
+mode = "test"
+hint = """
+A first-class error implements TWO traits beyond Debug: `std::fmt::Display`
+(human text) and `std::error::Error` (the marker, with default `source()`).
+The Display impl is one `match` with `write!(f, "...")` per arm — `write!`
+itself returns `fmt::Result`, no `?`/`Ok(())` needed. The empty
+`impl std::error::Error for MyError {}` is the smallest legal impl;
+chapter 8's review of the `?`-`From::from` desugaring still applies.
+"""
+
+[[exercises]]
+name = "err3_from_chain"
+path = "exercises/15_errors_at_scale/err3_from_chain.rs"
+mode = "test"
+hint = """
+Add a `Parse(ParseIntError)` variant + `impl From<ParseIntError> for MyError`
+so a single `?` lifts parser errors into the enum (chapter 8 res4 territory,
+extended). Override `Error::source()` to expose wrapped variants — return
+`Some(e)` for `Io(e)` / `Parse(e)`, `None` for variants that originate the
+failure here. The `dyn std::error::Error + 'static` return type is verbatim.
+The function body is one `?` plus a domain check plus a `match`.
+"""
+
+[[exercises]]
+name = "err4_thiserror"
+path = "exercises/15_errors_at_scale/err4_thiserror.rs"
+mode = "test"
+hint = """
+Imitate `#[derive(thiserror::Error)]` BY HAND. The macro turns
+`#[error("...")]` attributes into Display match arms and `#[from]` into a
+`From` impl plus a `source()` wiring. The runner has no Cargo, so we write
+the four impls (Debug derive, Display, Error+source, From) ourselves —
+exactly what the macro emits. In a real crate `cargo add thiserror` and
+those ~50 lines collapse to ~10. The function bodies don't change.
+"""
+
+[[exercises]]
+name = "err5_anyhow"
+path = "exercises/15_errors_at_scale/err5_anyhow.rs"
+mode = "test"
+hint = """
+`anyhow::Error` is essentially `Box<dyn Error + Send + Sync + 'static>`.
+The blanket `From<E> for Box<dyn Error+...>` lets `?` swallow ANY concrete
+error — no hand-written From impls. Define `type DynError = Box<...>` and
+`type Result<T> = std::result::Result<T, DynError>`. Build a tiny `Errored`
+wrapper + `Context` extension trait so `.with_context(|| msg)?` adds a
+chained layer. `e.downcast_ref::<io::Error>()` recovers the concrete type.
+Use this pattern in BINARIES; thiserror in libraries.
+"""
+
+[[exercises]]
+name = "errors_quiz_at_scale"
+path = "exercises/15_errors_at_scale/errors_quiz.rs"
+mode = "test"
+hint = """
+Capstone: `parse_user_command` for `get/set/delete/count`. Build a 5-variant
+`MyError` (Empty, UnknownVerb(String), MissingArg(&'static str),
+BadCount(ParseIntError), Trailing(String)) with hand-written Display +
+Error + `source()` + `From<ParseIntError>` — exactly the err1–err4 toolkit.
+`split_whitespace` collapses runs; `.ok_or(MyError::MissingArg(role))?` for
+absent tokens; `?` lifts the count parse via your From impl. Check leftover
+tokens AFTER taking required args to detect Trailing input.
+"""
+
+# ====================== Chapter 18 — Async / await ===========================
+
+[[exercises]]
+name = "async1_intro"
+path = "exercises/18_async/async1_intro.rs"
+mode = "test"
+hint = """
+`async fn foo() -> T` desugars to `fn foo() -> impl Future<Output = T>`.
+Calling an async fn does NOT run the body — futures are LAZY. They sit
+as paused state machines until something polls them. `.await` is the
+suspension point: poll the inner future, return its value, or pause
+this future too. The bridge from sync `main` to async is an executor
+— here, the hand-rolled `runtime::block_on` at the bottom of the file.
+"""
+
+[[exercises]]
+name = "async2_runtime"
+path = "exercises/18_async/async2_runtime.rs"
+mode = "test"
+hint = """
+The executor's job: build a Waker (no-op here), pin the future, then
+loop calling `poll`. Ready returns the value; Pending means "park me
+and call back when you're notified." Real runtimes park the OS thread;
+we spin because every Pending in this chapter resolves on the next
+poll. Read `mod runtime` — it's the smallest complete executor for
+single-future programs, and it's what `#[tokio::main]` is hiding.
+"""
+
+[[exercises]]
+name = "async3_join"
+path = "exercises/18_async/async3_join.rs"
+mode = "test"
+hint = """
+`runtime::join2(a, b).await` polls BOTH children on each round and
+returns the pair when both are Ready. That's CONCURRENCY (both alive,
+interleaved polls) not necessarily PARALLELISM (different threads).
+Compare the sequential form `let a = .await; let b = .await;` — total
+time is the SUM of the two latencies. With join, total ≈ MAX. The
+real-world spelling is `tokio::join!(fa, fb)` or `futures::future::join`.
+"""
+
+[[exercises]]
+name = "async4_select"
+path = "exercises/18_async/async4_select.rs"
+mode = "test"
+hint = """
+`select2(a, b)` returns whichever finishes first as `Either<A, B>`.
+The losing future is DROPPED — that's how async cancellation works in
+Rust: stop polling, drop the future, every Drop impl on the way down
+cleans up its resources. There is no kill syscall. Use `select` for
+timeouts (`select(work, timer)`), shutdown (`select(server, signal)`),
+or first-of-N replicated requests. tokio's macro is `tokio::select!`.
+"""
+
+[[exercises]]
+name = "async5_spawn"
+path = "exercises/18_async/async5_spawn.rs"
+mode = "test"
+hint = """
+`spawn(fut)` pushes a future onto a task queue and returns. The
+executor polls all queued tasks, retiring those that go Ready and
+re-queueing those still Pending — this is how a single thread runs
+many concurrent tasks. Spawned futures must be `'static` and have
+`Output = ()`; communicate results back through shared state
+(`Rc<Cell<T>>` here, `Arc<Mutex<T>>` or channels in real code).
+"""
+
+[[exercises]]
+name = "async6_send"
+path = "exercises/18_async/async6_send.rs"
+mode = "compile"
+hint = """
+Multi-threaded executors load-balance tasks across threads, so
+`tokio::spawn` requires `F: Future + Send + 'static`. A future is
+non-Send when it captures a non-Send value across an `.await` (the
+classic example: `Rc<T>`). The fix is usually a one-line type swap:
+`Rc -> Arc`, `RefCell -> Mutex`, `Cell -> Atomic*`. Or drop the value
+BEFORE the await so it never enters the state machine.
+"""
+
+[[exercises]]
+name = "async7_streams"
+path = "exercises/18_async/async7_streams.rs"
+mode = "test"
+hint = """
+A `Stream` is the async sibling of `Iterator`: `poll_next` returns
+`Poll<Option<Item>>`. The consumer idiom is
+`while let Some(x) = s.next().await { ... }` — direct translation of
+`for x in iter`. Provided here: a `CounterStream` that yields 1..=n
+with a Pending between each item, plus a `StreamExt::next()` adapter
+so the await syntax works. In real code use `futures::Stream` or
+`tokio_stream`.
+"""
+
+[[exercises]]
+name = "async_quiz"
+path = "exercises/18_async/async_quiz.rs"
+mode = "test"
+hint = """
+Capstone: three async "fetches" run concurrently via `join_all`. Each
+async fn produces a UNIQUE anonymous future type, so to put them in
+one Vec you erase via `Pin<Box<dyn Future<Output = T>>>` (aliased as
+`BoxFuture<T>`). `join_all` polls every child until all are Ready and
+returns the outputs in submission order. Real code: `tokio::join!` for
+fixed arity, `futures::future::join_all` for dynamic.
+"""
+
+# ====================== Chapter 19 — Macros ==================================
+
+[[exercises]]
+name = "macro1_println"
+path = "exercises/19_macros/macro1_println.rs"
+mode = "compile"
+hint = """
+A reading exercise — what `println!` actually IS. The trailing `!` means
+macro, not function. `println!` cannot be a function because it needs:
+variable arity, heterogeneous argument types, and compile-time validation
+of the format string literal. All `print!`/`println!`/`format!`/`write!`
+ultimately delegate to `format_args!`, which builds a `core::fmt::Arguments`.
+The format string MUST be a string literal — the macro tokenises it at
+expansion time. Once the comments click, just delete `// I AM NOT DONE`.
+"""
+
+[[exercises]]
+name = "macro2_macro_rules"
+path = "exercises/19_macros/macro2_macro_rules.rs"
+mode = "test"
+hint = """
+`macro_rules! NAME { (PATTERN) => { EXPANSION }; }`. Capture chunks of
+input with `$name:KIND` — the most useful KINDs are `expr`, `ident`, `ty`,
+`tt`, `block`. Refer to a captured chunk in the expansion as `$name`. For
+`square!`, use `$x:expr` and wrap the EXPANSION in parentheses so
+`square!(2 + 3)` becomes `((2 + 3) * (2 + 3)) == 25`, not 11. For
+`say_hello!`, the empty pattern `()` matches no input.
+"""
+
+[[exercises]]
+name = "macro3_repetition"
+path = "exercises/19_macros/macro3_repetition.rs"
+mode = "test"
+hint = """
+Repetition shape: `$( PATTERN )SEP REPEATER`. `*` is zero-or-more, `+` is
+one-or-more, `?` is zero-or-one (no separator). Mirror the SAME shape on
+the expansion side. The HEAD/TAIL trick — `$head:expr $(, $tail:expr )*`
+expanding to `$head $( .min($tail) )*` — gives a clean reduction:
+one element produces zero `.min` calls, N elements produce N-1.
+"""
+
+[[exercises]]
+name = "macro4_hygiene"
+path = "exercises/19_macros/macro4_hygiene.rs"
+mode = "test"
+hint = """
+Hygiene means identifiers introduced INSIDE a `macro_rules!` body live in
+the macro's own scope, separate from the caller's. So `let _tmp = $x;`
+inside the macro does NOT shadow a caller-side `_tmp`. Captured fragments
+like `$x` keep the caller's scope, so `$x` resolves names in the caller.
+Use a block expression `{{ ... }}` so the expansion yields a value. C's
+textual macros can't promise this — Rust's can.
+"""
+
+[[exercises]]
+name = "macro5_proc_taste"
+path = "exercises/19_macros/macro5_proc_taste.rs"
+mode = "compile"
+hint = """
+A reading exercise on procedural macros. The pipeline:
+TokenStream → proc_macro2::TokenStream → syn AST (DeriveInput) →
+inspection → `quote! { ... }` → TokenStream → spliced back in. Three
+flavours: derive (`#[derive(Debug)]`), attribute (`#[tokio::main]`), and
+function-like (`sqlx::query!`). They live in a separate `proc-macro = true`
+crate. We can't ship one in this single-file sandbox; the comments walk
+through what `#[derive(Debug)]` expands to. Run `cargo expand` on a real
+project to see expansions for yourself.
+"""
+
+[[exercises]]
+name = "macros_quiz"
+path = "exercises/19_macros/macros_quiz.rs"
+mode = "test"
+hint = """
+Capstone: a `hashmap!{ "a" => 1, "b" => 2 }` literal macro. Pattern is
+`( $( $k:expr => $v:expr ),* $(,)? )` — comma-separated key/value pairs
+with an optional trailing comma. Expansion is a block that builds a
+`HashMap`, inserts each pair, and yields the map. Use the absolute path
+`::std::collections::HashMap` so the macro works in any module without
+requiring callers to `use HashMap;` first. Hygiene keeps the internal
+`let mut m = ...` from clashing with anything at the call site.
+"""
+
+# ====================== Chapter 20 — Capstone project ========================
+
+[[exercises]]
+name = "proj1_skeleton"
+path = "exercises/20_capstone/proj1_skeleton.rs"
+mode = "run"
+hint = """
+The first stop on the capstone tour. Read the chapter plan in the file —
+it lists every later exercise and which earlier chapter each one revisits.
+You only need to fill the `???` with a string literal (a `&'static str`).
+The runner just needs `main` to compile and exit 0.
+"""
+
+[[exercises]]
+name = "proj2_io"
+path = "exercises/20_capstone/proj2_io.rs"
+mode = "test"
+hint = """
+`read_input` normalises a `&str` into an owned `String`:
+  - `s.replace("\\r\\n", "\\n")` collapses Windows line endings,
+  - `.trim()` strips outer whitespace,
+  - `.to_string()` returns ownership.
+The "real stdin" path is in the commentary; tests pass `&str` directly so
+the file is self-contained.
+"""
+
+[[exercises]]
+name = "proj3_types"
+path = "exercises/20_capstone/proj3_types.rs"
+mode = "test"
+hint = """
+Define the domain. `Stats::new()` returns the all-zero record. `add(kind, n)`
+matches on the `CountUnit` enum and adds `n` to the matching field. Tag-only
+enums (no payload) are zero-cost dispatch — perfect for "which category?"
+"""
+
+[[exercises]]
+name = "proj4_parse"
+path = "exercises/20_capstone/proj4_parse.rs"
+mode = "test"
+hint = """
+Three iterator one-liners:
+  text.lines().count()
+  text.split_whitespace().count()
+  text.chars().count()
+`chars()` counts Unicode scalar values, not bytes — the right choice for a
+human-friendly `wc`.
+"""
+
+[[exercises]]
+name = "proj5_logic"
+path = "exercises/20_capstone/proj5_logic.rs"
+mode = "test"
+hint = """
+Top-K most-frequent words: build a HashMap with the entry API, dump to a
+Vec, `sort_by` with `cb.cmp(ca).then_with(|| wa.cmp(wb))` (counts DESC,
+words ASC for ties), then `.take(k).collect()`.
+"""
+
+[[exercises]]
+name = "proj6_concurrency"
+path = "exercises/20_capstone/proj6_concurrency.rs"
+mode = "test"
+hint = """
+`std::thread::scope` (stable since 1.63) lets spawned threads borrow stack
+data — no Arc<String> ceremony. Spawn one handle per chunk, COLLECT all
+handles before joining (so the work runs in parallel), then merge with
+`Stats::merge`.
+"""
+
+[[exercises]]
+name = "proj7_cli"
+path = "exercises/20_capstone/proj7_cli.rs"
+mode = "run"
+hint = """
+A tiny argv parser, no `clap`. Walk `std::env::args().skip(1)` with a `while
+let Some(arg) = iter.next()` loop so flags like `--top N` can pull their
+value from the same iterator. The runner executes with no args, so the
+default-no-flags branch must compile and print cleanly (exit 0 = PASS).
+"""
+
+[[exercises]]
+name = "proj_quiz"
+path = "exercises/20_capstone/proj_quiz.rs"
+mode = "test"
+hint = """
+Final integration. `summarise(text, k)` simply calls `count_basic(text)` for
+the `Stats` and `top_words(text, k)` for the leaderboard, packs them into a
+`Summary`. The orchestration layer does no work itself — that's the point.
+"""
